@@ -34,13 +34,24 @@ export const authOptions: NextAuthOptions = {
           throw new Error("No user found with this email address")
         }
 
-        // For demo purposes, we'll skip password verification
-        // In production, implement proper password hashing
+        if (!user.emailVerified) {
+          throw new Error("Please verify your email before signing in")
+        }
+
+        // Check password if it exists
+        if (user.password) {
+          const isPasswordValid = await bcrypt.compare(credentials.password, user.password)
+          if (!isPasswordValid) {
+            throw new Error("Invalid password")
+          }
+        }
+
         return {
           id: user.id,
           email: user.email,
           name: user.name,
           image: user.image,
+          role: user.role,
         }
       },
     }),
@@ -52,12 +63,14 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id
+        token.role = user.role
       }
       return token
     },
     async session({ session, token }) {
       if (token && session.user) {
         session.user.id = token.id as string
+        session.user.role = token.role as string
       }
       return session
     },

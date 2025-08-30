@@ -162,3 +162,134 @@ export function RevenueAnalytics() {
     </div>
   )
 }
+"use client"
+
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { BarChart3, DollarSign, TrendingUp, Users } from "lucide-react"
+
+export function RevenueAnalytics() {
+  const stats = {
+    totalRevenue: 45678,
+    monthlyRevenue: 12345,
+    subscriptions: {
+      basic: 1200,
+      premium: 800,
+      elite: 150
+    },
+    coinsSold: 25000,
+    averageRevenuePerUser: 15.50
+  }
+
+  return (
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+            <DollarSign className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">${stats.totalRevenue.toLocaleString()}</div>
+            <p className="text-xs text-muted-foreground">
+              <span className="text-green-600">+12%</span> from last month
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Monthly Revenue</CardTitle>
+            <TrendingUp className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">${stats.monthlyRevenue.toLocaleString()}</div>
+            <p className="text-xs text-muted-foreground">
+              <span className="text-green-600">+8%</span> from last month
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Avg Revenue Per User</CardTitle>
+            <Users className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">${stats.averageRevenuePerUser}</div>
+            <p className="text-xs text-muted-foreground">
+              <span className="text-green-600">+5%</span> from last month
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Subscription Breakdown</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium">Basic Plan</p>
+                  <p className="text-xs text-gray-500">$9.99/month</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-sm font-bold">{stats.subscriptions.basic}</p>
+                  <p className="text-xs text-gray-500">subscribers</p>
+                </div>
+              </div>
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium">Premium Plan</p>
+                  <p className="text-xs text-gray-500">$19.99/month</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-sm font-bold">{stats.subscriptions.premium}</p>
+                  <p className="text-xs text-gray-500">subscribers</p>
+                </div>
+              </div>
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium">Elite Plan</p>
+                  <p className="text-xs text-gray-500">$39.99/month</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-sm font-bold">{stats.subscriptions.elite}</p>
+                  <p className="text-xs text-gray-500">subscribers</p>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Revenue Sources</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <span className="text-sm">Subscriptions</span>
+                <span className="text-sm font-bold">$32,450</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm">Coin Purchases</span>
+                <span className="text-sm font-bold">$8,750</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm">Boosts & Features</span>
+                <span className="text-sm font-bold">$3,200</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm">Super Likes</span>
+                <span className="text-sm font-bold">$1,278</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  )
+}

@@ -189,3 +189,150 @@ export function UsersManagement() {
     </Card>
   )
 }
+"use client"
+
+import { useState } from "react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { Input } from "@/components/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Search, MoreHorizontal, Ban, CheckCircle, AlertTriangle } from "lucide-react"
+
+interface User {
+  id: string
+  name: string
+  email: string
+  status: "active" | "suspended" | "pending"
+  role: "USER" | "ADMIN"
+  verified: boolean
+  joinedAt: string
+  lastActive: string
+}
+
+export function UsersManagement() {
+  const [users] = useState<User[]>([
+    {
+      id: "1",
+      name: "John Doe",
+      email: "john@example.com",
+      status: "active",
+      role: "USER",
+      verified: true,
+      joinedAt: "2024-01-15",
+      lastActive: "2024-01-20"
+    },
+    {
+      id: "2",
+      name: "Jane Smith",
+      email: "jane@example.com",
+      status: "suspended",
+      role: "USER",
+      verified: false,
+      joinedAt: "2024-01-10",
+      lastActive: "2024-01-18"
+    }
+  ])
+  
+  const [searchTerm, setSearchTerm] = useState("")
+  const [statusFilter, setStatusFilter] = useState("all")
+
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case "active":
+        return <Badge className="bg-green-100 text-green-800">Active</Badge>
+      case "suspended":
+        return <Badge className="bg-red-100 text-red-800">Suspended</Badge>
+      case "pending":
+        return <Badge className="bg-yellow-100 text-yellow-800">Pending</Badge>
+      default:
+        return <Badge>Unknown</Badge>
+    }
+  }
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Users Management</CardTitle>
+        <div className="flex space-x-4 mt-4">
+          <div className="relative flex-1 max-w-sm">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+            <Input
+              placeholder="Search users..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10"
+            />
+          </div>
+          <Select value={statusFilter} onValueChange={setStatusFilter}>
+            <SelectTrigger className="w-32">
+              <SelectValue placeholder="Status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All</SelectItem>
+              <SelectItem value="active">Active</SelectItem>
+              <SelectItem value="suspended">Suspended</SelectItem>
+              <SelectItem value="pending">Pending</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </CardHeader>
+      <CardContent>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>User</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Role</TableHead>
+              <TableHead>Verified</TableHead>
+              <TableHead>Joined</TableHead>
+              <TableHead>Last Active</TableHead>
+              <TableHead>Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {users.map((user) => (
+              <TableRow key={user.id}>
+                <TableCell>
+                  <div>
+                    <div className="font-medium">{user.name}</div>
+                    <div className="text-sm text-gray-500">{user.email}</div>
+                  </div>
+                </TableCell>
+                <TableCell>{getStatusBadge(user.status)}</TableCell>
+                <TableCell>
+                  <Badge variant={user.role === "ADMIN" ? "default" : "secondary"}>
+                    {user.role}
+                  </Badge>
+                </TableCell>
+                <TableCell>
+                  {user.verified ? (
+                    <CheckCircle className="h-5 w-5 text-green-500" />
+                  ) : (
+                    <AlertTriangle className="h-5 w-5 text-yellow-500" />
+                  )}
+                </TableCell>
+                <TableCell>{user.joinedAt}</TableCell>
+                <TableCell>{user.lastActive}</TableCell>
+                <TableCell>
+                  <div className="flex space-x-2">
+                    <Button variant="outline" size="sm">
+                      View
+                    </Button>
+                    <Button variant="outline" size="sm">
+                      <Ban className="h-4 w-4" />
+                    </Button>
+                    <Button variant="outline" size="sm">
+                      <MoreHorizontal className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </CardContent>
+    </Card>
+  )
+}

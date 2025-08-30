@@ -198,3 +198,175 @@ export function SystemSettings() {
     </div>
   )
 }
+"use client"
+
+import { useState } from "react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Switch } from "@/components/ui/switch"
+import { Textarea } from "@/components/ui/textarea"
+import { Settings, Save, RefreshCw } from "lucide-react"
+
+export function SystemSettings() {
+  const [settings, setSettings] = useState({
+    maintenanceMode: false,
+    registrationEnabled: true,
+    emailVerificationRequired: true,
+    maxPhotosPerUser: 6,
+    maxAge: 99,
+    minAge: 18,
+    systemMessage: "",
+    reportAutoReview: true
+  })
+
+  const [isSaving, setIsSaving] = useState(false)
+
+  const handleSave = async () => {
+    setIsSaving(true)
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    setIsSaving(false)
+  }
+
+  return (
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Settings className="h-5 w-5" />
+            Platform Settings
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <Label htmlFor="maintenance">Maintenance Mode</Label>
+                  <p className="text-sm text-gray-500">Disable user access for maintenance</p>
+                </div>
+                <Switch
+                  id="maintenance"
+                  checked={settings.maintenanceMode}
+                  onCheckedChange={(checked) => 
+                    setSettings(prev => ({ ...prev, maintenanceMode: checked }))
+                  }
+                />
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div>
+                  <Label htmlFor="registration">Registration Enabled</Label>
+                  <p className="text-sm text-gray-500">Allow new user registrations</p>
+                </div>
+                <Switch
+                  id="registration"
+                  checked={settings.registrationEnabled}
+                  onCheckedChange={(checked) => 
+                    setSettings(prev => ({ ...prev, registrationEnabled: checked }))
+                  }
+                />
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div>
+                  <Label htmlFor="email-verification">Email Verification Required</Label>
+                  <p className="text-sm text-gray-500">Require email verification for new accounts</p>
+                </div>
+                <Switch
+                  id="email-verification"
+                  checked={settings.emailVerificationRequired}
+                  onCheckedChange={(checked) => 
+                    setSettings(prev => ({ ...prev, emailVerificationRequired: checked }))
+                  }
+                />
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div>
+                  <Label htmlFor="auto-review">Auto Review Reports</Label>
+                  <p className="text-sm text-gray-500">Automatically review simple reports</p>
+                </div>
+                <Switch
+                  id="auto-review"
+                  checked={settings.reportAutoReview}
+                  onCheckedChange={(checked) => 
+                    setSettings(prev => ({ ...prev, reportAutoReview: checked }))
+                  }
+                />
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="max-photos">Max Photos Per User</Label>
+                <Input
+                  id="max-photos"
+                  type="number"
+                  value={settings.maxPhotosPerUser}
+                  onChange={(e) => 
+                    setSettings(prev => ({ ...prev, maxPhotosPerUser: parseInt(e.target.value) }))
+                  }
+                  className="mt-1"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="min-age">Minimum Age</Label>
+                <Input
+                  id="min-age"
+                  type="number"
+                  value={settings.minAge}
+                  onChange={(e) => 
+                    setSettings(prev => ({ ...prev, minAge: parseInt(e.target.value) }))
+                  }
+                  className="mt-1"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="max-age">Maximum Age</Label>
+                <Input
+                  id="max-age"
+                  type="number"
+                  value={settings.maxAge}
+                  onChange={(e) => 
+                    setSettings(prev => ({ ...prev, maxAge: parseInt(e.target.value) }))
+                  }
+                  className="mt-1"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <Label htmlFor="system-message">System Message</Label>
+            <Textarea
+              id="system-message"
+              placeholder="Enter a system-wide message to display to users..."
+              value={settings.systemMessage}
+              onChange={(e) => 
+                setSettings(prev => ({ ...prev, systemMessage: e.target.value }))
+              }
+              className="mt-1"
+              rows={3}
+            />
+          </div>
+
+          <div className="flex justify-end space-x-4">
+            <Button variant="outline">
+              <RefreshCw className="h-4 w-4 mr-2" />
+              Reset
+            </Button>
+            <Button onClick={handleSave} disabled={isSaving}>
+              <Save className="h-4 w-4 mr-2" />
+              {isSaving ? "Saving..." : "Save Changes"}
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  )
+}

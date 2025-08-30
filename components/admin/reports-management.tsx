@@ -243,3 +243,150 @@ export function ReportsManagement() {
     </Card>
   )
 }
+"use client"
+
+import { useState } from "react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Flag, Eye, CheckCircle, X } from "lucide-react"
+
+interface Report {
+  id: string
+  reportedUser: string
+  reporterUser: string
+  reason: string
+  status: "pending" | "reviewing" | "resolved" | "dismissed"
+  priority: "low" | "medium" | "high"
+  createdAt: string
+  description: string
+}
+
+export function ReportsManagement() {
+  const [reports] = useState<Report[]>([
+    {
+      id: "1",
+      reportedUser: "John Doe",
+      reporterUser: "Jane Smith",
+      reason: "Inappropriate behavior",
+      status: "pending",
+      priority: "high",
+      createdAt: "2024-01-20",
+      description: "User sent inappropriate messages"
+    },
+    {
+      id: "2",
+      reportedUser: "Mike Johnson",
+      reporterUser: "Sarah Wilson",
+      reason: "Fake profile",
+      status: "reviewing",
+      priority: "medium",
+      createdAt: "2024-01-19",
+      description: "Profile pictures appear to be fake"
+    }
+  ])
+
+  const [statusFilter, setStatusFilter] = useState("all")
+
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case "pending":
+        return <Badge className="bg-yellow-100 text-yellow-800">Pending</Badge>
+      case "reviewing":
+        return <Badge className="bg-blue-100 text-blue-800">Reviewing</Badge>
+      case "resolved":
+        return <Badge className="bg-green-100 text-green-800">Resolved</Badge>
+      case "dismissed":
+        return <Badge className="bg-gray-100 text-gray-800">Dismissed</Badge>
+      default:
+        return <Badge>Unknown</Badge>
+    }
+  }
+
+  const getPriorityBadge = (priority: string) => {
+    switch (priority) {
+      case "high":
+        return <Badge className="bg-red-100 text-red-800">High</Badge>
+      case "medium":
+        return <Badge className="bg-yellow-100 text-yellow-800">Medium</Badge>
+      case "low":
+        return <Badge className="bg-green-100 text-green-800">Low</Badge>
+      default:
+        return <Badge>Unknown</Badge>
+    }
+  }
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Flag className="h-5 w-5" />
+          Reports Management
+        </CardTitle>
+        <div className="flex space-x-4 mt-4">
+          <Select value={statusFilter} onValueChange={setStatusFilter}>
+            <SelectTrigger className="w-40">
+              <SelectValue placeholder="Filter by status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Reports</SelectItem>
+              <SelectItem value="pending">Pending</SelectItem>
+              <SelectItem value="reviewing">Reviewing</SelectItem>
+              <SelectItem value="resolved">Resolved</SelectItem>
+              <SelectItem value="dismissed">Dismissed</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </CardHeader>
+      <CardContent>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Reported User</TableHead>
+              <TableHead>Reporter</TableHead>
+              <TableHead>Reason</TableHead>
+              <TableHead>Priority</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Date</TableHead>
+              <TableHead>Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {reports.map((report) => (
+              <TableRow key={report.id}>
+                <TableCell className="font-medium">{report.reportedUser}</TableCell>
+                <TableCell>{report.reporterUser}</TableCell>
+                <TableCell>
+                  <div>
+                    <div className="font-medium">{report.reason}</div>
+                    <div className="text-sm text-gray-500 truncate max-w-xs">
+                      {report.description}
+                    </div>
+                  </div>
+                </TableCell>
+                <TableCell>{getPriorityBadge(report.priority)}</TableCell>
+                <TableCell>{getStatusBadge(report.status)}</TableCell>
+                <TableCell>{report.createdAt}</TableCell>
+                <TableCell>
+                  <div className="flex space-x-2">
+                    <Button variant="outline" size="sm">
+                      <Eye className="h-4 w-4" />
+                    </Button>
+                    <Button variant="outline" size="sm" className="text-green-600">
+                      <CheckCircle className="h-4 w-4" />
+                    </Button>
+                    <Button variant="outline" size="sm" className="text-red-600">
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </CardContent>
+    </Card>
+  )
+}
