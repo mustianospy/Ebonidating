@@ -70,8 +70,6 @@ const COIN_FEATURES = [
   },
 ]
 
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
-
 export function CoinsStore({ currentCoins }: CoinsStoreProps) {
   const handlePurchaseCoins = async (packageId: string) => {
     try {
