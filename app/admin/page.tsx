@@ -1,7 +1,8 @@
-import { getServerSession } from "next-auth"
-import { redirect } from "next/navigation"
+
+import { getServerSession } from "next-auth/next"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { redirect } from "next/navigation"
 import { AdminDashboard } from "@/components/admin/admin-dashboard"
 
 export default async function AdminPage() {
@@ -11,14 +12,18 @@ export default async function AdminPage() {
     redirect("/auth/signin")
   }
 
-  // Check if user is admin
   const user = await prisma.user.findUnique({
     where: { email: session.user.email },
+    select: { role: true }
   })
 
   if (!user || user.role !== 'ADMIN') {
     redirect("/dashboard")
   }
 
-  return <AdminDashboard />
+  return (
+    <div className="min-h-screen bg-background">
+      <AdminDashboard />
+    </div>
+  )
 }

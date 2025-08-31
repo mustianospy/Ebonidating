@@ -1,10 +1,10 @@
-
 "use client"
 
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Heart, Shield, Users, Star, Check, ArrowRight, Sparkles, MessageCircle, Zap } from "lucide-react"
+import { Heart, Shield, Users, Star, Check, ArrowRight, Sparkles, MessageCircle, Zap, CheckCircle, Crown } from "lucide-react"
+import Image from "next/image"
 
 export function LandingPage() {
   return (
@@ -39,104 +39,87 @@ export function LandingPage() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden">
-        {/* Background decoration */}
-        <div className="absolute inset-0 bg-gradient-to-r from-purple-400/10 via-pink-400/10 to-indigo-400/10"></div>
-        <div className="absolute top-20 left-10 w-20 h-20 bg-purple-200 rounded-full opacity-50 animate-float"></div>
-        <div className="absolute top-40 right-20 w-12 h-12 bg-pink-200 rounded-full opacity-50 animate-float delay-1000"></div>
-        <div className="absolute bottom-20 left-1/4 w-16 h-16 bg-indigo-200 rounded-full opacity-50 animate-float delay-2000"></div>
-        
-        <div className="relative container mx-auto px-4 py-20">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="text-left space-y-8">
-              <div className="space-y-6">
-                <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-purple-100 to-pink-100 rounded-full text-sm font-medium text-purple-700 mb-4">
-                  <Sparkles className="h-4 w-4 mr-2" />
-                  #1 Dating App for Meaningful Connections
-                </div>
-                <h1 className="text-5xl md:text-7xl font-bold text-gray-900 leading-tight">
-                  Find Your
-                  <br />
-                  <span className="bg-gradient-to-r from-purple-600 via-pink-600 to-indigo-600 bg-clip-text text-transparent animate-gradient">
-                    Perfect Match
-                  </span>
-                </h1>
-                <p className="text-xl text-gray-600 max-w-xl leading-relaxed">
-                  Join thousands of singles finding love every day. Our intelligent matching system connects you with compatible people who share your values and interests.
-                </p>
+      <section className="container mx-auto px-4 py-20">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="space-y-8">
+            <div className="space-y-4">
+              <h1 className="text-5xl lg:text-6xl font-bold tracking-tight">
+                Find Your
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600">
+                  {" "}Perfect Match
+                </span>
+              </h1>
+              <p className="text-xl text-muted-foreground max-w-2xl">
+                Connect with like-minded individuals in a safe, inclusive space designed for meaningful relationships. 
+                Your journey to love starts here.
+              </p>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Link href="/auth/signup">
+                <Button size="lg" className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
+                  Start Your Journey
+                </Button>
+              </Link>
+              <Button size="lg" variant="outline">
+                Learn More
+              </Button>
+            </div>
+            <div className="flex items-center space-x-8 pt-8">
+              <div className="text-center">
+                <div className="text-2xl font-bold">50K+</div>
+                <div className="text-sm text-muted-foreground">Active Members</div>
               </div>
-              
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Link href="/auth/signup">
-                  <Button size="lg" className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-                    <Heart className="mr-2 h-5 w-5" />
-                    Start Dating Today
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </Button>
-                </Link>
-                <Link href="/discover">
-                  <Button size="lg" variant="outline" className="border-purple-300 text-purple-700 hover:bg-purple-50 transition-all duration-300">
-                    <Users className="mr-2 h-5 w-5" />
-                    Browse Profiles
-                  </Button>
-                </Link>
+              <div className="text-center">
+                <div className="text-2xl font-bold">10K+</div>
+                <div className="text-sm text-muted-foreground">Success Stories</div>
               </div>
-
-              {/* Stats */}
-              <div className="flex items-center gap-8 pt-8">
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-purple-600">10K+</div>
-                  <div className="text-sm text-gray-500">Active Users</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-pink-600">500+</div>
-                  <div className="text-sm text-gray-500">Daily Matches</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-indigo-600">95%</div>
-                  <div className="text-sm text-gray-500">Success Rate</div>
-                </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold">99%</div>
+                <div className="text-sm text-muted-foreground">Satisfaction Rate</div>
               </div>
             </div>
-            
-            <div className="relative">
-              <div className="grid grid-cols-2 gap-6">
-                <div className="relative group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-400 to-pink-400 rounded-3xl opacity-75 group-hover:opacity-100 transition-opacity duration-300 animate-pulse-slow"></div>
-                  <div className="relative overflow-hidden rounded-3xl border-4 border-white shadow-2xl transform rotate-3 group-hover:rotate-0 transition-transform duration-300">
-                    <img
-                      src="/hero-male.png"
-                      alt="Happy male user"
-                      className="w-full h-80 object-cover"
-                    />
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 to-transparent p-4">
-                      <div className="text-white text-sm font-medium">Alex, 28</div>
-                      <div className="text-white/80 text-xs">Just joined today!</div>
-                    </div>
-                  </div>
-                </div>
-                <div className="relative group mt-8">
-                  <div className="absolute inset-0 bg-gradient-to-r from-pink-400 to-indigo-400 rounded-3xl opacity-75 group-hover:opacity-100 transition-opacity duration-300 animate-pulse-slow delay-500"></div>
-                  <div className="relative overflow-hidden rounded-3xl border-4 border-white shadow-2xl transform -rotate-3 group-hover:rotate-0 transition-transform duration-300">
-                    <img
-                      src="/hero-female.png"
-                      alt="Happy female user"
-                      className="w-full h-80 object-cover"
-                    />
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 to-transparent p-4">
-                      <div className="text-white text-sm font-medium">Maya, 26</div>
-                      <div className="text-white/80 text-xs">Online now</div>
-                    </div>
-                  </div>
-                </div>
+          </div>
+          <div className="relative">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-4">
+                <Card className="overflow-hidden shadow-lg">
+                  <Image
+                    src="/hero-female.png"
+                    alt="Happy couple"
+                    width={200}
+                    height={250}
+                    className="w-full h-64 object-cover"
+                  />
+                </Card>
+                <Card className="overflow-hidden shadow-lg">
+                  <Image
+                    src="/outdoor-hiker.png"
+                    alt="Individual portrait"
+                    width={200}
+                    height={200}
+                    className="w-full h-48 object-cover"
+                  />
+                </Card>
               </div>
-              
-              {/* Floating hearts */}
-              <div className="absolute top-10 left-1/2 transform -translate-x-1/2">
-                <Heart className="h-6 w-6 text-pink-400 animate-bounce" />
-              </div>
-              <div className="absolute bottom-10 right-10">
-                <Heart className="h-4 w-4 text-purple-400 animate-bounce delay-500" />
+              <div className="space-y-4 pt-8">
+                <Card className="overflow-hidden shadow-lg">
+                  <Image
+                    src="/hero-male.png"
+                    alt="Professional portrait"
+                    width={200}
+                    height={200}
+                    className="w-full h-48 object-cover"
+                  />
+                </Card>
+                <Card className="overflow-hidden shadow-lg">
+                  <Image
+                    src="/diverse-group.png"
+                    alt="Group of friends"
+                    width={200}
+                    height={250}
+                    className="w-full h-64 object-cover"
+                  />
+                </Card>
               </div>
             </div>
           </div>
@@ -177,7 +160,7 @@ export function LandingPage() {
             Experience dating reimagined with our cutting-edge features designed for meaningful connections
           </p>
         </div>
-        
+
         <div className="grid md:grid-cols-3 gap-8">
           <Card className="group hover:shadow-2xl transition-all duration-300 border-0 bg-gradient-to-br from-purple-50 to-purple-100 hover:from-purple-100 hover:to-purple-200">
             <CardHeader className="text-center">
@@ -190,7 +173,7 @@ export function LandingPage() {
               </CardDescription>
             </CardHeader>
           </Card>
-          
+
           <Card className="group hover:shadow-2xl transition-all duration-300 border-0 bg-gradient-to-br from-pink-50 to-pink-100 hover:from-pink-100 hover:to-pink-200">
             <CardHeader className="text-center">
               <div className="mx-auto w-16 h-16 bg-gradient-to-r from-pink-600 to-indigo-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
@@ -202,7 +185,7 @@ export function LandingPage() {
               </CardDescription>
             </CardHeader>
           </Card>
-          
+
           <Card className="group hover:shadow-2xl transition-all duration-300 border-0 bg-gradient-to-br from-indigo-50 to-indigo-100 hover:from-indigo-100 hover:to-indigo-200">
             <CardHeader className="text-center">
               <div className="mx-auto w-16 h-16 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
@@ -224,7 +207,7 @@ export function LandingPage() {
             <h2 className="text-4xl font-bold mb-4">Love Stories That Inspire</h2>
             <p className="text-xl opacity-90">Real couples who found their perfect match on EboniDating</p>
           </div>
-          
+
           <div className="grid md:grid-cols-3 gap-8">
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center">
               <div className="flex justify-center mb-4">
@@ -235,7 +218,7 @@ export function LandingPage() {
               </blockquote>
               <cite className="font-semibold">— Sarah & Marcus</cite>
             </div>
-            
+
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center">
               <div className="flex justify-center mb-4">
                 <Sparkles className="h-12 w-12 text-yellow-300" />
@@ -245,7 +228,7 @@ export function LandingPage() {
               </blockquote>
               <cite className="font-semibold">— Jordan & Alex</cite>
             </div>
-            
+
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center">
               <div className="flex justify-center mb-4">
                 <Star className="h-12 w-12 text-indigo-300" />
@@ -265,7 +248,7 @@ export function LandingPage() {
           <h2 className="text-4xl font-bold text-gray-900 mb-4">How It Works</h2>
           <p className="text-xl text-gray-600">Get started in just 3 simple steps</p>
         </div>
-        
+
         <div className="grid md:grid-cols-3 gap-12">
           <div className="text-center">
             <div className="relative mx-auto w-20 h-20 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full flex items-center justify-center mb-6">
@@ -279,7 +262,7 @@ export function LandingPage() {
               Add photos, write your bio, and tell us what you're looking for. Our verification system ensures authentic profiles.
             </p>
           </div>
-          
+
           <div className="text-center">
             <div className="relative mx-auto w-20 h-20 bg-gradient-to-r from-pink-600 to-indigo-600 rounded-full flex items-center justify-center mb-6">
               <span className="text-2xl font-bold text-white">2</span>
@@ -292,7 +275,7 @@ export function LandingPage() {
               Our AI analyzes compatibility factors to suggest quality matches. Swipe, like, or use advanced filters to find your type.
             </p>
           </div>
-          
+
           <div className="text-center">
             <div className="relative mx-auto w-20 h-20 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full flex items-center justify-center mb-6">
               <span className="text-2xl font-bold text-white">3</span>
@@ -309,76 +292,123 @@ export function LandingPage() {
       </section>
 
       {/* Pricing Section */}
-      <section className="container mx-auto px-4 py-20 bg-gradient-to-r from-gray-50 to-purple-50 rounded-3xl my-20">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">Choose Your Dating Experience</h2>
-          <p className="text-xl text-gray-600">Plans designed to help you find meaningful connections</p>
+      <section className="container mx-auto px-4 py-20">
+        <div className="text-center space-y-4 mb-16">
+          <h2 className="text-4xl font-bold">Choose Your Plan</h2>
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            Unlock premium features and find your perfect match faster
+          </p>
         </div>
-        
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          <Card className="relative border-2 border-gray-200 hover:border-purple-300 transition-all duration-300">
-            <CardHeader className="text-center">
+        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          {/* Free Plan */}
+          <Card className="relative">
+            <CardHeader className="text-center pb-4">
+              <Heart className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
               <CardTitle className="text-2xl">Free</CardTitle>
+              <div className="text-3xl font-bold">$0</div>
               <CardDescription>Perfect for getting started</CardDescription>
-              <div className="text-4xl font-bold mt-4">$0<span className="text-lg text-gray-500">/month</span></div>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-4">
               <ul className="space-y-3">
-                <li className="flex items-center"><Check className="h-5 w-5 text-green-500 mr-3" />5 likes per day</li>
-                <li className="flex items-center"><Check className="h-5 w-5 text-green-500 mr-3" />Basic matching</li>
-                <li className="flex items-center"><Check className="h-5 w-5 text-green-500 mr-3" />Limited messaging</li>
-                <li className="flex items-center"><Check className="h-5 w-5 text-green-500 mr-3" />Profile verification</li>
+                <li className="flex items-center space-x-2">
+                  <CheckCircle className="w-4 h-4 text-green-500" />
+                  <span className="text-sm">10 daily swipes</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <CheckCircle className="w-4 h-4 text-green-500" />
+                  <span className="text-sm">Basic messaging</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <CheckCircle className="w-4 h-4 text-green-500" />
+                  <span className="text-sm">Profile creation</span>
+                </li>
               </ul>
-              <Link href="/auth/signup" className="block mt-8">
-                <Button className="w-full" variant="outline">Get Started Free</Button>
-              </Link>
-            </CardContent>
-          </Card>
-          
-          <Card className="relative border-2 border-purple-500 shadow-2xl transform scale-105">
-            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-              <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-2 rounded-full text-sm font-medium">
-                Most Popular
-              </div>
-            </div>
-            <CardHeader className="text-center pt-8">
-              <CardTitle className="text-2xl">Plus</CardTitle>
-              <CardDescription>Enhanced dating experience</CardDescription>
-              <div className="text-4xl font-bold mt-4">$9.99<span className="text-lg text-gray-500">/month</span></div>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-3">
-                <li className="flex items-center"><Check className="h-5 w-5 text-green-500 mr-3" />Unlimited likes</li>
-                <li className="flex items-center"><Check className="h-5 w-5 text-green-500 mr-3" />Advanced filters</li>
-                <li className="flex items-center"><Check className="h-5 w-5 text-green-500 mr-3" />Read receipts</li>
-                <li className="flex items-center"><Check className="h-5 w-5 text-green-500 mr-3" />Priority support</li>
-                <li className="flex items-center"><Check className="h-5 w-5 text-green-500 mr-3" />See who liked you</li>
-              </ul>
-              <Link href="/subscription" className="block mt-8">
-                <Button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
-                  Upgrade to Plus
+              <Link href="/auth/signup">
+                <Button className="w-full" variant="outline">
+                  Get Started
                 </Button>
               </Link>
             </CardContent>
           </Card>
-          
-          <Card className="relative border-2 border-gray-200 hover:border-indigo-300 transition-all duration-300">
-            <CardHeader className="text-center">
-              <CardTitle className="text-2xl">Pro</CardTitle>
-              <CardDescription>Premium features for serious daters</CardDescription>
-              <div className="text-4xl font-bold mt-4">$19.99<span className="text-lg text-gray-500">/month</span></div>
+
+          {/* Premium Plan */}
+          <Card className="relative border-purple-500 ring-2 ring-purple-500">
+            <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+              <div className="bg-purple-600 text-white px-3 py-1 rounded-full text-sm font-medium">
+                Most Popular
+              </div>
+            </div>
+            <CardHeader className="text-center pb-4">
+              <Star className="h-8 w-8 text-purple-500 mx-auto mb-2" />
+              <CardTitle className="text-2xl">Premium</CardTitle>
+              <div className="text-3xl font-bold">$14.99</div>
+              <CardDescription>For serious daters</CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-4">
               <ul className="space-y-3">
-                <li className="flex items-center"><Check className="h-5 w-5 text-green-500 mr-3" />Everything in Plus</li>
-                <li className="flex items-center"><Check className="h-5 w-5 text-green-500 mr-3" />Super likes</li>
-                <li className="flex items-center"><Check className="h-5 w-5 text-green-500 mr-3" />Video calls</li>
-                <li className="flex items-center"><Check className="h-5 w-5 text-green-500 mr-3" />Travel mode</li>
-                <li className="flex items-center"><Check className="h-5 w-5 text-green-500 mr-3" />Profile boost</li>
+                <li className="flex items-center space-x-2">
+                  <CheckCircle className="w-4 h-4 text-green-500" />
+                  <span className="text-sm">Unlimited swipes</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <CheckCircle className="w-4 h-4 text-green-500" />
+                  <span className="text-sm">10 super likes per day</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <CheckCircle className="w-4 h-4 text-green-500" />
+                  <span className="text-sm">Advanced filters</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <CheckCircle className="w-4 h-4 text-green-500" />
+                  <span className="text-sm">Travel mode</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <CheckCircle className="w-4 h-4 text-green-500" />
+                  <span className="text-sm">3 boosts per month</span>
+                </li>
               </ul>
-              <Link href="/subscription" className="block mt-8">
-                <Button className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700">
-                  Go Pro
+              <Link href="/auth/signup">
+                <Button className="w-full bg-purple-600 hover:bg-purple-700">
+                  Choose Premium
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+
+          {/* Gold Plan */}
+          <Card className="relative">
+            <CardHeader className="text-center pb-4">
+              <Crown className="h-8 w-8 text-yellow-500 mx-auto mb-2" />
+              <CardTitle className="text-2xl">Gold</CardTitle>
+              <div className="text-3xl font-bold">$24.99</div>
+              <CardDescription>Ultimate dating experience</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <ul className="space-y-3">
+                <li className="flex items-center space-x-2">
+                  <CheckCircle className="w-4 h-4 text-green-500" />
+                  <span className="text-sm">Everything in Premium</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <CheckCircle className="w-4 h-4 text-green-500" />
+                  <span className="text-sm">Unlimited super likes</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <CheckCircle className="w-4 h-4 text-green-500" />
+                  <span className="text-sm">Unlimited boosts</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <CheckCircle className="w-4 h-4 text-green-500" />
+                  <span className="text-sm">Video calls</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <CheckCircle className="w-4 h-4 text-green-500" />
+                  <span className="text-sm">VIP profile badge</span>
+                </li>
+              </ul>
+              <Link href="/auth/signup">
+                <Button className="w-full bg-yellow-600 hover:bg-yellow-700">
+                  Go Gold
                 </Button>
               </Link>
             </CardContent>
@@ -433,7 +463,7 @@ export function LandingPage() {
                 </div>
               </div>
             </div>
-            
+
             <div>
               <h3 className="font-semibold text-lg mb-4">Features</h3>
               <ul className="space-y-3 text-gray-400">
@@ -443,7 +473,7 @@ export function LandingPage() {
                 <li><Link href="/subscription" className="hover:text-white transition-colors">Premium</Link></li>
               </ul>
             </div>
-            
+
             <div>
               <h3 className="font-semibold text-lg mb-4">Support</h3>
               <ul className="space-y-3 text-gray-400">
@@ -453,7 +483,7 @@ export function LandingPage() {
                 <li><Link href="/feedback" className="hover:text-white transition-colors">Feedback</Link></li>
               </ul>
             </div>
-            
+
             <div>
               <h3 className="font-semibold text-lg mb-4">Legal</h3>
               <ul className="space-y-3 text-gray-400">
@@ -464,7 +494,7 @@ export function LandingPage() {
               </ul>
             </div>
           </div>
-          
+
           <div className="border-t border-gray-800 mt-12 pt-8">
             <div className="flex flex-col md:flex-row justify-between items-center">
               <p className="text-gray-400">&copy; 2024 EboniDating. All rights reserved.</p>

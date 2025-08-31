@@ -35,12 +35,10 @@ export function DashboardContent({ user }: DashboardContentProps) {
 
   const getSubscriptionColor = (tier: string) => {
     switch (tier) {
-      case "PLUS":
-        return "bg-secondary text-secondary-foreground"
-      case "PRO":
-        return "bg-primary text-primary-foreground"
-      case "ULTRA":
-        return "bg-accent text-accent-foreground"
+      case "PREMIUM":
+        return "bg-purple-500 text-white"
+      case "GOLD":
+        return "bg-yellow-500 text-white"
       default:
         return "bg-muted text-muted-foreground"
     }

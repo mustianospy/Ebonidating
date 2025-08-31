@@ -1,8 +1,7 @@
 
 export const SUBSCRIPTION_PRICES = {
-  PLUS: 9.99,
-  PRO: 19.99,
-  ULTRA: 29.99,
+  PREMIUM: 14.99,
+  GOLD: 24.99,
 } as const
 
 export const COIN_PACKAGES = {
@@ -26,36 +25,22 @@ export const FEATURE_COSTS = {
 export const TIER_BENEFITS = {
   FREE: {
     dailyLikes: 10,
-    superLikes: 1,
+    superLikes: 0,
     boosts: 0,
     videoCallAccess: false,
     galleryUnlocks: 0,
   },
-  STANDARD: {
-    dailyLikes: 20,
-    superLikes: 5,
-    boosts: 1,
-    videoCallAccess: false,
-    galleryUnlocks: 2,
-  },
-  PLUS: {
-    dailyLikes: 50,
+  PREMIUM: {
+    dailyLikes: -1, // unlimited
     superLikes: 10,
     boosts: 3,
-    videoCallAccess: true,
-    galleryUnlocks: 5,
+    videoCallAccess: false,
+    galleryUnlocks: 3,
   },
-  PRO: {
-    dailyLikes: 100,
-    superLikes: 20,
-    boosts: 5,
-    videoCallAccess: true,
-    galleryUnlocks: 10,
-  },
-  ULTRA: {
+  GOLD: {
     dailyLikes: -1, // unlimited
     superLikes: -1, // unlimited
-    boosts: 10,
+    boosts: -1, // unlimited
     videoCallAccess: true,
     galleryUnlocks: -1, // unlimited
   },

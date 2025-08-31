@@ -41,24 +41,22 @@ export function WalletContent() {
 
   const getTierInfo = (tier: string) => {
     switch (tier) {
-      case "STANDARD":
-        return { name: "Standard", icon: Star, color: "bg-gray-500", benefits: ["Basic messaging", "Limited likes"] }
-      case "PREMIUM_SILVER":
-        return {
-          name: "Premium Silver",
-          icon: Star,
-          color: "bg-gray-400",
-          benefits: ["Unlimited messaging", "Video calls", "Advanced filters"],
+      case "PREMIUM":
+        return { 
+          name: "Premium", 
+          icon: Star, 
+          color: "bg-purple-500", 
+          benefits: ["Unlimited swipes", "10 super likes/day", "Advanced filters", "Travel mode"] 
         }
-      case "PREMIUM_GOLD":
+      case "GOLD":
         return {
-          name: "Premium Gold",
+          name: "Gold",
           icon: Crown,
           color: "bg-yellow-500",
-          benefits: ["All Silver benefits", "Priority matching", "Exclusive features"],
+          benefits: ["All Premium benefits", "Unlimited super likes", "Video calls", "VIP badge"],
         }
       default:
-        return { name: "Standard", icon: Star, color: "bg-gray-500", benefits: ["Basic features"] }
+        return { name: "Free", icon: Heart, color: "bg-gray-500", benefits: ["Basic features", "Limited swipes"] }
     }
   }
 

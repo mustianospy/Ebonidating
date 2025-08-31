@@ -124,13 +124,12 @@ export const authOptions: NextAuthOptions = {
         // Refresh user data on each token refresh
         if (token.id) {
           const dbUser = await prisma.user.findUnique({
-            where: { id: token.id as string },
-            include: { profile: true }
+            where: { id: token.id as string }
           })
           
           if (dbUser) {
             token.role = dbUser.role
-            token.profileComplete = !!dbUser.profile
+            token.profileComplete = !!(dbUser.bio && dbUser.age && dbUser.location)
           }
         }
         
