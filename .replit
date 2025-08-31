@@ -1,4 +1,4 @@
-modules = ["nodejs-20", "web", "nix", "nodejs-23", "nodejs-14", "typescript-language-server", "nodejs-with-prybar-18", "docker", "bash"]
+modules = ["nodejs-20", "web"]
 run = "npm run dev"
 
 [nix]
@@ -6,8 +6,7 @@ channel = "stable-25_05"
 packages = ["nano", "supabase-cli"]
 
 [deployment]
-run = ["sh", "-c", "pnpm start"]
-build = ["sh", "-c", "pnpm run build"]
+run = ["sh", "-c", "npm run dev"]
 
 [workflows]
 runButton = "Development"
