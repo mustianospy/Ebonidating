@@ -67,6 +67,62 @@ export async function POST(request: NextRequest) {
             data: {
               subscriptionTier: subscriptionTier as any,
               subscriptionExpiresAt: expiresAt,
+              hasEverPaid: true,
+            },
+          })
+
+          await prisma.transaction.create({
+            data: {
+              userId,
+              type: "SUBSCRIPTION",
+              amount: session.amount_total! / 100,
+              status: "COMPLETED",
+              stripeId: session.id,
+              description: `${subscriptionTier} subscription`,
+            },
+          })
+        }
+
+        break
+      }
+
+      case "invoice.payment_succeeded": {
+        const invoice = event.data.object as Stripe.Invoice
+        if (invoice.subscription) {
+          // Handle recurring subscription payment
+          console.log("Subscription payment succeeded:", invoice.id)
+        }
+        break
+      }
+
+      case "invoice.payment_failed": {
+        const invoice = event.data.object as Stripe.Invoice
+        if (invoice.subscription) {
+          // Handle failed subscription payment
+          console.log("Subscription payment failed:", invoice.id)
+        }
+        break
+      }
+
+      default:
+        console.log(`Unhandled event type: ${event.type}`)
+    }
+
+    return NextResponse.json({ received: true })
+  } catch (error) {
+    console.error("Webhook error:", error)
+    return NextResponse.json(
+      { error: "Webhook handler failed" },
+      { status: 500 }
+    )
+  }
+}
+
+          await prisma.user.update({
+            where: { id: userId },
+            data: {
+              subscriptionTier: subscriptionTier as any,
+              subscriptionExpiresAt: expiresAt,
             },
           })
 

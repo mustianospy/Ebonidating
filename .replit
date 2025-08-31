@@ -6,7 +6,8 @@ channel = "stable-25_05"
 packages = ["nano", "supabase-cli"]
 
 [deployment]
-run = ["sh", "-c", "npm run dev"]
+run = ["sh", "-c", "npm run start"]
+build = ["sh", "-c", "npm run build"]
 
 [workflows]
 runButton = "Development"

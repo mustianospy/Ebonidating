@@ -1,129 +1,134 @@
-const express = require("express")
-const http = require("http")
-const socketIo = require("socket.io")
-const cors = require("cors")
+const express = require('express');
+const http = require('http');
+const cors = require('cors');
+const { Server } = require('socket.io');
 
-const app = express()
-const server = http.createServer(app)
+const app = express();
+const server = http.createServer(app);
 
-app.use(cors())
+// Configure CORS
+app.use(cors({
+  origin: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+  credentials: true
+}));
 
-const io = socketIo(server, {
+const io = new Server(server, {
   cors: {
-    origin: process.env.CLIENT_URL || "http://localhost:3000",
+    origin: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
     methods: ["GET", "POST"],
-  },
-})
+    credentials: true
+  }
+});
 
-// Store active users and their socket connections
-const activeUsers = new Map()
-const chatRooms = new Map()
+const PORT = process.env.SOCKET_PORT || 3001;
 
-io.on("connection", (socket) => {
-  console.log("User connected:", socket.id)
+// Store active users
+const activeUsers = new Map();
 
-  // Handle user authentication
-  socket.on("authenticate", (userId) => {
-    activeUsers.set(userId, socket.id)
-    socket.userId = userId
-    console.log(`User ${userId} authenticated`)
-  })
+io.on('connection', (socket) => {
+  console.log('User connected:', socket.id);
+
+  // Handle user joining
+  socket.on('join-user', (userId) => {
+    activeUsers.set(userId, socket.id);
+    socket.userId = userId;
+
+    // Join user-specific room
+    socket.join(`user_${userId}`);
+
+    // Notify friends that user is online
+    socket.broadcast.emit('user-online', userId);
+  });
 
   // Handle joining chat rooms
-  socket.on("join-chat", (chatId) => {
-    socket.join(chatId)
-
-    if (!chatRooms.has(chatId)) {
-      chatRooms.set(chatId, new Set())
-    }
-    chatRooms.get(chatId).add(socket.userId)
-
-    console.log(`User ${socket.userId} joined chat ${chatId}`)
-  })
-
-  // Handle leaving chat rooms
-  socket.on("leave-chat", (chatId) => {
-    socket.leave(chatId)
-
-    if (chatRooms.has(chatId)) {
-      chatRooms.get(chatId).delete(socket.userId)
-    }
-
-    console.log(`User ${socket.userId} left chat ${chatId}`)
-  })
+  socket.on('join-chat', (chatId) => {
+    socket.join(`chat_${chatId}`);
+    console.log(`User ${socket.userId} joined chat ${chatId}`);
+  });
 
   // Handle sending messages
-  socket.on("send-message", ({ chatId, message }) => {
-    // Broadcast message to all users in the chat room
-    socket.to(chatId).emit("new-message", message)
-    console.log(`Message sent to chat ${chatId}:`, message.content)
-  })
+  socket.on('send-message', (data) => {
+    const { chatId, message } = data;
+
+    // Emit to all users in the chat room
+    socket.to(`chat_${chatId}`).emit('new-message', {
+      ...message,
+      senderId: socket.userId
+    });
+  });
 
   // Handle typing indicators
-  socket.on("typing", ({ chatId, isTyping }) => {
-    socket.to(chatId).emit("user-typing", {
+  socket.on('typing-start', (chatId) => {
+    socket.to(`chat_${chatId}`).emit('user-typing', {
       userId: socket.userId,
-      isTyping,
-    })
-  })
+      isTyping: true
+    });
+  });
+
+  socket.on('typing-stop', (chatId) => {
+    socket.to(`chat_${chatId}`).emit('user-typing', {
+      userId: socket.userId,
+      isTyping: false
+    });
+  });
 
   // Handle video call signaling
-  socket.on("call-user", ({ targetUserId, offer }) => {
-    const targetSocketId = activeUsers.get(targetUserId)
-    if (targetSocketId) {
-      io.to(targetSocketId).emit("incoming-call", {
-        from: socket.userId,
-        offer,
-      })
-    }
-  })
+  socket.on('call-user', (data) => {
+    const { targetUserId, offer } = data;
+    const targetSocketId = activeUsers.get(targetUserId);
 
-  socket.on("answer-call", ({ targetUserId, answer }) => {
-    const targetSocketId = activeUsers.get(targetUserId)
     if (targetSocketId) {
-      io.to(targetSocketId).emit("call-answered", {
-        from: socket.userId,
-        answer,
-      })
+      io.to(targetSocketId).emit('incoming-call', {
+        callerId: socket.userId,
+        offer
+      });
     }
-  })
+  });
 
-  socket.on("ice-candidate", ({ targetUserId, candidate }) => {
-    const targetSocketId = activeUsers.get(targetUserId)
+  socket.on('answer-call', (data) => {
+    const { callerId, answer } = data;
+    const callerSocketId = activeUsers.get(callerId);
+
+    if (callerSocketId) {
+      io.to(callerSocketId).emit('call-answered', {
+        answer
+      });
+    }
+  });
+
+  socket.on('ice-candidate', (data) => {
+    const { targetUserId, candidate } = data;
+    const targetSocketId = activeUsers.get(targetUserId);
+
     if (targetSocketId) {
-      io.to(targetSocketId).emit("ice-candidate", {
-        from: socket.userId,
+      io.to(targetSocketId).emit('ice-candidate', {
         candidate,
-      })
+        senderId: socket.userId
+      });
     }
-  })
+  });
 
-  socket.on("end-call", ({ targetUserId }) => {
-    const targetSocketId = activeUsers.get(targetUserId)
+  socket.on('end-call', (targetUserId) => {
+    const targetSocketId = activeUsers.get(targetUserId);
+
     if (targetSocketId) {
-      io.to(targetSocketId).emit("call-ended", {
-        from: socket.userId,
-      })
+      io.to(targetSocketId).emit('call-ended');
     }
-  })
+  });
 
   // Handle disconnection
-  socket.on("disconnect", () => {
+  socket.on('disconnect', () => {
+    console.log('User disconnected:', socket.id);
+
     if (socket.userId) {
-      activeUsers.delete(socket.userId)
+      activeUsers.delete(socket.userId);
 
-      // Remove user from all chat rooms
-      chatRooms.forEach((users, chatId) => {
-        users.delete(socket.userId)
-      })
+      // Notify friends that user is offline
+      socket.broadcast.emit('user-offline', socket.userId);
     }
-
-    console.log("User disconnected:", socket.id)
-  })
-})
-
-const PORT = process.env.PORT || 3001
+  });
+});
 
 server.listen(PORT, '0.0.0.0', () => {
-  console.log(`Socket server running on port ${PORT}`)
-})
+  console.log(`Socket server running on port ${PORT}`);
+});

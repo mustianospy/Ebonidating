@@ -52,6 +52,32 @@ export async function POST(request: NextRequest) {
     const verificationToken = Math.random().toString(36).substring(2, 15) + 
                              Math.random().toString(36).substring(2, 15)
 
+    // Send verification email
+    try {
+      const { sendVerificationEmail } = await import("@/lib/email")
+      await sendVerificationEmail(email, verificationToken)
+    } catch (emailError) {
+      console.error("Failed to send verification email:", emailError)
+      // Continue with user creation even if email fails
+    }
+
+    return NextResponse.json(
+      { 
+        message: "User created successfully. Please check your email for verification instructions.",
+        userId: user.id 
+      },
+      { status: 201 }
+    )
+
+  } catch (error) {
+    console.error("Signup error:", error)
+    return NextResponse.json(
+      { error: "Failed to create user" },
+      { status: 500 }
+    )
+  }
+}
+
     await prisma.verificationToken.create({
       data: {
         identifier: email,

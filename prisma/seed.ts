@@ -1,9 +1,11 @@
 import { PrismaClient, SubscriptionTier } from "@prisma/client"
 
+import { PrismaClient, SubscriptionTier } from "@prisma/client"
+
 const prisma = new PrismaClient()
 
 async function main() {
-  console.log("🌱 Seeding database...")
+  console.log("🌱 Seeding database...").")
 
   // Create sample users
   const users = await Promise.all([
@@ -145,6 +147,28 @@ async function main() {
         senderId: users[1].id,
         receiverId: users[0].id,
         content: "Thank you! I saw you love hiking - we should explore some trails together!",
+        type: "TEXT",
+      },
+    }),
+  ])
+
+  // Create sample messages
+  await Promise.all([
+    prisma.message.create({
+      data: {
+        chatId: chat.id,
+        senderId: users[0].id,
+        receiverId: users[1].id,
+        content: "Hey! Great to match with you!",
+        type: "TEXT",
+      },
+    }),
+    prisma.message.create({
+      data: {
+        chatId: chat.id,
+        senderId: users[1].id,
+        receiverId: users[0].id,
+        content: "Likewise! I love your hiking photos.",
         type: "TEXT",
       },
     }),
