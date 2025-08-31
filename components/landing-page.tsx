@@ -13,8 +13,7 @@ export function LandingPage() {
       <header className="container mx-auto px-4 py-6">
         <nav className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <Heart className="h-8 w-8 text-purple-600" />
-            <span className="text-2xl font-bold text-gray-900">EboniDating</span>
+            <img src="/logo.png" alt="EboniDating" className="h-10 w-auto" />
           </div>
           <div className="flex items-center space-x-4">
             <Link href="/auth/signin">
@@ -28,25 +27,49 @@ export function LandingPage() {
       </header>
 
       {/* Hero Section */}
-      <section className="container mx-auto px-4 py-16 text-center">
-        <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-          Find Your Perfect <span className="text-purple-600">Match</span>
-        </h1>
-        <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-          Connect with like-minded individuals in our inclusive, safe, and premium dating platform designed for meaningful relationships.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link href="/auth/signup">
-            <Button size="lg" className="bg-purple-600 hover:bg-purple-700">
-              Start Dating Today
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-          </Link>
-          <Link href="/discover">
-            <Button size="lg" variant="outline">
-              Browse Profiles
-            </Button>
-          </Link>
+      <section className="relative overflow-hidden">
+        <div className="container mx-auto px-4 py-20">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="text-left">
+              <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+                Welcome to <span className="text-purple-600">Eboni Dating</span>
+              </h1>
+              <p className="text-xl text-gray-600 mb-8 max-w-xl">
+                Connect with like-minded individuals in our inclusive, safe, and premium dating platform designed for meaningful relationships.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link href="/auth/signup">
+                  <Button size="lg" className="bg-purple-600 hover:bg-purple-700">
+                    Start Dating Today
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
+                <Link href="/discover">
+                  <Button size="lg" variant="outline">
+                    Browse Profiles
+                  </Button>
+                </Link>
+              </div>
+            </div>
+            <div className="relative">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="relative overflow-hidden rounded-2xl">
+                  <img
+                    src="/hero-male.png"
+                    alt="Happy male user"
+                    className="w-full h-80 object-cover"
+                  />
+                </div>
+                <div className="relative overflow-hidden rounded-2xl mt-8">
+                  <img
+                    src="/hero-female.png"
+                    alt="Happy female user"
+                    className="w-full h-80 object-cover"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -154,8 +177,7 @@ export function LandingPage() {
           <div className="grid md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center space-x-2 mb-4">
-                <Heart className="h-6 w-6 text-purple-400" />
-                <span className="text-xl font-bold">EboniDating</span>
+                <img src="/logo.png" alt="EboniDating" className="h-8 w-auto filter brightness-0 invert" />
               </div>
               <p className="text-gray-400">
                 Building meaningful connections in a safe, inclusive community.

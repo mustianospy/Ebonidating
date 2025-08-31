@@ -1,28 +1,22 @@
 
 {
-  "name": "EboniDating - LGBTQ+ Dating Community",
+  "name": "EboniDating - Find Your Perfect Match",
   "short_name": "EboniDating",
-  "description": "Connect with your community. Find love, friendship, and meaningful connections in a safe, inclusive space.",
+  "description": "Connect with like-minded individuals in our premium dating platform",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#8b5cf6",
-  "orientation": "portrait-primary",
-  "categories": ["social", "lifestyle"],
+  "theme_color": "#9333ea",
   "icons": [
     {
-      "src": "/icon-192.png",
+      "src": "/logo.png",
       "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable any"
+      "type": "image/png"
     },
     {
-      "src": "/icon-512.png",
+      "src": "/logo.png",
       "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable any"
+      "type": "image/png"
     }
-  ],
-  "lang": "en",
-  "dir": "ltr"
+  ]
 }

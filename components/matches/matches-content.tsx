@@ -79,8 +79,7 @@ export function MatchesContent({ currentUser, matches, recentLikes }: MatchesCon
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <Heart className="h-8 w-8 text-primary" />
-              <span className="text-2xl font-serif font-bold">EboniDating</span>
+              <img src="/logo.png" alt="EboniDating" className="h-10 w-auto" />
             </div>
             <div className="flex items-center space-x-4">
               <Link href="/discover">

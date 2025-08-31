@@ -22,6 +22,10 @@ const openSans = Open_Sans({
 export const metadata: Metadata = {
   title: "EboniDating - Find Your Perfect Match",
   description: "Connect with like-minded individuals in our premium dating platform",
+  icons: {
+    icon: "/logo.png",
+    apple: "/logo.png",
+  },
 }
 
 export const viewport = {
