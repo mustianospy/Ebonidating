@@ -1,203 +1,62 @@
-import { type NextRequest, NextResponse } from "next/server"
-import { headers } from "next/headers"
+import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import Stripe from "stripe"
 
-if (!process.env.STRIPE_SECRET_KEY) {
-  throw new Error("STRIPE_SECRET_KEY is not defined")
-}
-
-if (!process.env.STRIPE_WEBHOOK_SECRET) {
-  throw new Error("STRIPE_WEBHOOK_SECRET is not defined")
-}
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
   apiVersion: "2023-10-16",
 })
 
-const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET
-
-export async function POST(request: NextRequest) {
+export async function POST(req: NextRequest) {
   try {
-    const body = await request.text()
-    const signature = headers().get("stripe-signature")!
+    const sig = req.headers.get("stripe-signature")
+    if (!sig) {
+      return NextResponse.json({ error: "Missing Stripe signature" }, { status: 400 })
+    }
 
+    const body = await req.text()
     let event: Stripe.Event
 
     try {
-      event = stripe.webhooks.constructEvent(body, signature, webhookSecret)
-    } catch (err) {
-      console.error("Webhook signature verification failed:", err)
+      event = stripe.webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHOOK_SECRET as string)
+    } catch (err: any) {
+      console.error("⚠️ Webhook signature verification failed.", err.message)
       return NextResponse.json({ error: "Invalid signature" }, { status: 400 })
     }
 
     switch (event.type) {
       case "checkout.session.completed": {
         const session = event.data.object as Stripe.Checkout.Session
-        const { userId, type, subscriptionTier, coins } = session.metadata!
+        const userId = session.metadata?.userId
+        const subscriptionTier = session.metadata?.tier
 
-        if (type === "coins") {
-          // Handle coin purchase
-          await prisma.user.update({
-            where: { id: userId },
-            data: {
-              coins: {
-                increment: Number.parseInt(coins),
-              },
-            },
-          })
+        if (!userId || !subscriptionTier) break
 
-          await prisma.transaction.create({
-            data: {
-              userId,
-              type: "COINS",
-              amount: session.amount_total! / 100,
-              status: "COMPLETED",
-              stripeId: session.id,
-              description: `${coins} coins purchased`,
-            },
-          })
-        } else {
-          // Handle subscription
-          const expiresAt = new Date()
-          expiresAt.setMonth(expiresAt.getMonth() + 1)
-
-          await prisma.user.update({
-            where: { id: userId },
-            data: {
-              subscriptionTier: subscriptionTier as any,
-              subscriptionExpiresAt: expiresAt,
-              hasEverPaid: true,
-            },
-          })
-
-          await prisma.transaction.create({
-            data: {
-              userId,
-              type: "SUBSCRIPTION",
-              amount: session.amount_total! / 100,
-              status: "COMPLETED",
-              stripeId: session.id,
-              description: `${subscriptionTier} subscription`,
-            },
-          })
-        }
-
+        await prisma.subscription.create({
+          data: {
+            userId,
+            tier: subscriptionTier,
+            stripeId: session.subscription as string,
+            description: `${subscriptionTier} subscription`,
+          },
+        })
         break
       }
 
-      case "invoice.payment_succeeded": {
-        const invoice = event.data.object as Stripe.Invoice
-        if (invoice.subscription) {
-          // Handle recurring subscription payment
-          console.log("Subscription payment succeeded:", invoice.id)
-        }
-        break
-      }
-
-      case "invoice.payment_failed": {
-        const invoice = event.data.object as Stripe.Invoice
-        if (invoice.subscription) {
-          // Handle failed subscription payment
-          console.log("Subscription payment failed:", invoice.id)
-        }
+      case "customer.subscription.deleted": {
+        const subscription = event.data.object as Stripe.Subscription
+        await prisma.subscription.deleteMany({
+          where: { stripeId: subscription.id },
+        })
         break
       }
 
       default:
-        console.log(`Unhandled event type: ${event.type}`)
+        console.log(`Unhandled event type ${event.type}`)
     }
 
     return NextResponse.json({ received: true })
   } catch (error) {
-    console.error("Webhook error:", error)
-    return NextResponse.json(
-      { error: "Webhook handler failed" },
-      { status: 500 }
-    )
-  }
-}
-
-          await prisma.user.update({
-            where: { id: userId },
-            data: {
-              subscriptionTier: subscriptionTier as any,
-              subscriptionExpiresAt: expiresAt,
-            },
-          })
-
-          await prisma.transaction.create({
-            data: {
-              userId,
-              type: "SUBSCRIPTION",
-              amount: session.amount_total! / 100,
-              status: "COMPLETED",
-              stripeId: session.id,
-              description: `${subscriptionTier} subscription`,
-            },
-          })
-        }
-        break
-      }
-
-      case "invoice.payment_succeeded": {
-        const invoice = event.data.object as Stripe.Invoice
-        if (invoice.subscription) {
-          // Handle recurring subscription payment
-          const subscription = await stripe.subscriptions.retrieve(invoice.subscription as string)
-          const { userId, subscriptionTier } = subscription.metadata
-
-          const expiresAt = new Date(subscription.current_period_end * 1000)
-
-          await prisma.user.update({
-            where: { id: userId },
-            data: {
-              subscriptionTier: subscriptionTier as any,
-              subscriptionExpiresAt: expiresAt,
-            },
-          })
-
-          await prisma.transaction.create({
-            data: {
-              userId,
-              type: "SUBSCRIPTION",
-              amount: invoice.amount_paid / 100,
-              status: "COMPLETED",
-              stripeId: invoice.id,
-              description: `${subscriptionTier} subscription renewal`,
-            },
-          })
-        }
-        break
-      }
-
-      case "invoice.payment_failed": {
-        const invoice = event.data.object as Stripe.Invoice
-        if (invoice.subscription) {
-          const subscription = await stripe.subscriptions.retrieve(invoice.subscription as string)
-          const { userId } = subscription.metadata
-
-          await prisma.transaction.create({
-            data: {
-              userId,
-              type: "SUBSCRIPTION",
-              amount: invoice.amount_due / 100,
-              status: "FAILED",
-              stripeId: invoice.id,
-              description: "Subscription payment failed",
-            },
-          })
-        }
-        break
-      }
-
-      default:
-        console.log(`Unhandled event type: ${event.type}`)
-    }
-
-    return NextResponse.json({ received: true })
-  } catch (error) {
-    console.error("Webhook error:", error)
-    return NextResponse.json({ error: "Webhook handler failed" }, { status: 500 })
+    console.error("Error handling Stripe webhook:", error)
+    return NextResponse.json({ error: "Webhook error" }, { status: 500 })
   }
 }
