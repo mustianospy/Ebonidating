@@ -27,9 +27,14 @@ export async function GET(req: NextRequest) {
       data: { emailVerified: new Date() },
     })
 
-    await prisma.verificationToken.delete({ where: { id: verificationToken.id } })
+    await prisma.verificationToken.delete({
+      where: { id: verificationToken.id },
+    })
 
-    return NextResponse.json({ message: "Email verified successfully" }, { status: 200 })
+    return NextResponse.json(
+      { message: "Email verified successfully" },
+      { status: 200 }
+    )
   } catch (error) {
     console.error("Error verifying email:", error)
     return NextResponse.json({ error: "Something went wrong" }, { status: 500 })
